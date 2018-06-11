@@ -2,47 +2,24 @@
 
 function makeid($len)
 {
-    $totid = '';
-    while (strlen($totid) < $len) {
-        $r = rand(0, 1);
-        if ($r == 0) {
-            $r = rand(0, 9);
-            $c = $r;
+    $result = '';
+    while (strlen($result) < $len) {
+        $rnd = rand(0, 1);
+        if ($rnd == 0) {
+            $rnd = rand(0, 9);
+            $char = $rnd;
         } else {
-            $r = rand(0, 25);
-            $c = chr(65 + $r);
+            $rnd = rand(0, 25);
+            $char = chr(65 + $rnd);
         }
-        $totid .= $c;
+        $result .= $char;
     }
-    return $totid;
+    return $result;
 }
 
-function bdDoret($host, $port, $ulanyjy, $parol, $bd_ady)
+function Generate()
 {
-    $conn = mysqli_connect($host, $ulanyjy, $parol);
-
-    if (!$conn) {
-        die('Serwere baglanmada näsazlyk ýüze çykdy!: ' . mysqli_error());
-    }
-
-    $sql = 'CREATE DATABASE IF NOT EXISTS ' . $bd_ady;
-    $retval = mysqli_query($conn, $sql);
-
-    if (!$retval) {
-        return false;
-    }
-
-    return true;
-    mysqli_close($conn);
-}
-
-function tabDoret($ady, $bdady, $host, $log, $pas)
-{
-    $kom = "CREATE TABLE IF NOT EXISTS $ady (
-        id VARCHAR(6) NOT NULL,
-        value VARCHAR(6) NOT NULL
-        )";
-    $soed = new mysqli($host, $log, $pas, $bdady);
-    $soed->query($kom);
-    $soed->close();
+    $result = makeid(10);
+    $json_result = array('id' => $result);
+    return json_encode($json_result);
 }

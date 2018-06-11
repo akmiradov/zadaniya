@@ -1,17 +1,21 @@
 <?php
 
-$sid = $_POST["id"];
-echo "Your selected ID is: " . $sid . "<br>";
-$soed = mysqli_connect('localhost', 'root', ''); // soedenit etdim
-mysqli_select_db($soed, "test_db"); // shol soedeneniye boyunca test_db baza dannyh sayladym
-$tab = "SELECT * FROM ulanyjylar WHERE (ID2='$sid')";
-$q = mysqli_query($soed, $tab);
-$netije = mysqli_fetch_array($q);
-echo $netije['id'];
-mysqli_close($soed);
-
-
+function retrieve()
 {
-        "id": "1",
-        "value": "$r"
+
+    $id_json = json_decode(file_get_contents('php://input'));
+    $id = ($id_json->id2);
+    echo "Your selected ID is: " . $id . "<br>";
+    $conn = mysqli_connect('localhost', 'root', '');
+    mysqli_select_db($conn, "test_db");
+    $command = "SELECT * FROM User_IDS WHERE (ID2='$id')";
+    $query = mysqli_query($conn, $command);
+    $result = mysqli_fetch_array($query);
+    $json_result = json_encode(array('id' => $result['id']));
+    mysqli_close($conn);
+    return $json_result;
+
 }
+
+$ret = retrieve();
+echo $ret;
